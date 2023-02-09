@@ -1,0 +1,57 @@
+------ check status------
+docker scan client-mentoryard
+
+----- login to docker-----
+docker login
+
+------- check all images--------
+docker images
+
+------ build project everything inside the folder  -----
+docker build -t client-mentoryard .
+
+------- to run project and docker image -------
+docker run -p 5173:5173 client-mentoryard
+
+---  configure files and run ------
+docker-compose run client-mentoryard
+
+
+-------- to stop a running process -------
+netstat -tulpn | grep :3000
+
+--- kill PID
+--- 
+
+docker-compose up
+
+sudo launchctl start com.docker.docker
+
+sudo launchctl stop com.docker.docker
+sudo launchctl start com.docker.docker
+docker stop client-mentoryard
+
+-------------------------------------------------
+# background os for container
+FROM node:15.13-alpine
+
+# photo to place our app
+WORKDIR /client-mentoryard
+
+# env module path for docker
+ENV PATH="./node_modules/.bin:$PATH" 
+
+# Copy the package.json and package-lock.json files
+COPY package*.json ./
+
+# Install the project dependencies
+RUN npm install
+
+# Copy the rest of the project files
+COPY . .
+
+# Run the build command
+RUN vite build
+
+# Specify the command to run when the container starts
+CMD [ "npm", "start" ]
